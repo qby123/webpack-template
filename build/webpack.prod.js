@@ -2,6 +2,12 @@ const { merge } = require('webpack-merge')
 const common = require('./webpack.common')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+const PurgeCSSPlugin = require('purgecss-webpack-plugin')
+const glob = require('glob')
+const path = require('path')
+const PATHS = {
+    src: path.join(__dirname, '../src')
+}
 
 module.exports = merge(common, {
     mode: 'production',
@@ -40,8 +46,11 @@ module.exports = merge(common, {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: 'styles/[name].[contenthash].css',
+            filename: 'styles/[name].[contenthash:8].css',
             chunkFilename: '[id].css',
-        })
+        }),
+        // new PurgeCSSPlugin({
+        //     paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
+        // }),
     ]
 })

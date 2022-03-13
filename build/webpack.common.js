@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
     entry: path.resolve(__dirname, '../src/main.js'),
     output: {
-        filename: 'js/[name].[hash].js',
+        filename: 'js/[name].[contenthash:8].js',
         publicPath: '/',
         clean: true
     },
@@ -12,6 +12,23 @@ module.exports = {
         extensions: ['.js', '.json'],
         alias: {
             '@': path.resolve(__dirname, '../src'),
+        },
+    },
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+            cacheGroups: {
+                defaultVendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10,
+                    reuseExistingChunk: true,
+                },
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true,
+                },
+            },
         },
     },
     module: {
